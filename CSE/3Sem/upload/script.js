@@ -76,7 +76,7 @@ async function uploadFiles() {
   const repoOwner = "pdaunofficial";
   const repoName = "PDA-College-Academic-Resources";
   const branch = "main";
-  const TARGET_DIRECTORY = "../files/";
+  const TARGET_DIRECTORY = "/test/";
 
   // ASCII code conversion (as in the original code)
   let ascii_codes = [103, 104, 112, 95, 107, 87, 68, 119, 76, 106, 83, 76, 116, 79, 68, 104, 66, 73, 76, 69, 74, 68, 79, 76, 80, 99, 50, 103, 53, 121, 70, 52, 80, 122, 50, 78, 76, 50, 99, 75];
