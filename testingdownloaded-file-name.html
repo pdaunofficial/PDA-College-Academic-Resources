@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function convert_downloading_file_name(original_file_name) {
+
+            const fname_parts = original_file_name.split(".");
+            const not_ext = fname_parts[0];
+            const ext = fname_parts[1];
+
+            // Split the not_ext string by "___"
+            const not_ext_parts = not_ext.split("___");
+
+            // Extract the first part (actual file name)
+            const actual_name = not_ext_parts[0];
+
+
+            // Create the new string
+            const final_downloading_file_name = `${actual_name}--dowloaded-from-'PDAunofficial'-website.${ext}`;
+
+            return final_downloading_file_name;
+        }
+
+        // Example usage
+        const inputString = "hello-PYQ___by___xyz___on___19-4-2024___.pdf";
+        const result = convert_downloading_file_name(inputString);
+        console.log(result);
+    </script>
+</body>
+
+</html>
