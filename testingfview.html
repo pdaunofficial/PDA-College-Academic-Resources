@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Box Component</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* height: 100vh; */
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #files-box-container {
+            /* display: flex; */
+
+        }
+
+        .file-box {
+            /*  */
+        }
+
+        .each-file-box {
+            margin: 20px;
+            max-width: 320px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: white;
+            padding: 1rem;
+
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .file-icon-wrapper {
+            margin-right: 1rem;
+            color: #6b7280;
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .file-type {
+            font-size: 0.625rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: absolute;
+            bottom: 0.25rem;
+        }
+
+        .file-name {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .file-details {
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        .button-preview {
+            background-color: #0067B8;
+        }
+
+        .button-preview:hover {
+            background-color: #2563eb;
+        }
+
+        .button-download {
+            background-color: #10b981;
+        }
+
+        .button-download:hover {
+            background-color: #059669;
+        }
+
+        .button i {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="files-box-container"></div>
+
+   
+    <script>
+        function createFileBox(fileType, senderName, sentDate, fileName) {
+            const fileBoxContainer = document.getElementById('files-box-container');
+            const fileBox = document.createElement('div');
+            fileBox.className = 'file-box';
+
+            function formatDate(date) {
+                const now = new Date();
+                const targetDate = new Date(date);
+                const diffTime = now - targetDate;
+
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const diffMonths = now.getMonth() - targetDate.getMonth() + (12 * (now.getFullYear() - targetDate.getFullYear()));
+                const diffYears = now.getFullYear() - targetDate.getFullYear();
+
+                if (diffDays === 0) return "today";
+                if (diffDays === 1) return "yesterday";
+                if (diffDays < 30) return `${diffDays} days ago`;
+                // if (diffMonths === 1) return "a month ago";
+                if (diffMonths < 12) return `${diffMonths} months ago`;
+                // if (diffYears === 1) return "a year ago";
+                return `${diffYears} years ago`;
+            }
+
+            function getFileTypeLabel(type) {
+                switch (type.toLowerCase()) {
+                    case 'pdf': return 'PDF';
+                    case 'doc':
+                    case 'docx': return 'DOC';
+                    case 'txt': return 'TXT';
+                    case 'rtf': return 'RTF';
+                    case 'xls':
+                    case 'xlsx':
+                    case 'csv': return 'XLS';
+                    case 'ppt':
+                    case 'pptx': return 'PPT';
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                    case 'gif':
+                    case 'bmp':
+                    case 'tiff': return 'IMG';
+                    case 'mp3':
+                    case 'wav':
+                    case 'ogg':
+                    case 'm4a': return 'AUD';
+                    case 'mp4':
+                    case 'avi':
+                    case 'mov':
+                    case 'wmv': return 'VID';
+                    case 'zip':
+                    case 'rar':
+                    case '7z': return 'ZIP';
+                    case 'html':
+                    case 'css':
+                    case 'js':
+                    case 'py':
+                    case 'java':
+                    case 'c':
+                    case 'cpp': return 'CODE';
+                    case 'tex':
+                    case 'bib': return 'TEX';
+                    case 'epub':
+                    case 'mobi': return 'EBOOK';
+                    case 'dwg':
+                    case 'dxf':
+                    case 'stl': return 'CAD';
+                    case 'sav':
+                    case 'sas':
+                    case 'stata': return 'DATA';
+                    default: return 'FILE';
+                }
+            }
+
+            function getFileIcon(type) {
+                switch (type.toLowerCase()) {
+                    case 'pdf': return 'fa-file-pdf';
+                    case 'doc':
+                    case 'docx': return 'fa-file-word';
+                    case 'txt': return 'fa-file-lines';
+                    case 'rtf': return 'fa-file-alt';
+                    case 'xls':
+                    case 'xlsx':
+                    case 'csv': return 'fa-file-excel';
+                    case 'ppt':
+                    case 'pptx': return 'fa-file-powerpoint';
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                    case 'gif':
+                    case 'bmp':
+                    case 'tiff': return 'fa-file-image';
+                    case 'mp3':
+                    case 'wav':
+                    case 'ogg':
+                    case 'm4a': return 'fa-file-audio';
+                    case 'mp4':
+                    case 'avi':
+                    case 'mov':
+                    case 'wmv': return 'fa-file-video';
+                    case 'zip':
+                    case 'rar':
+                    case '7z': return 'fa-file-zipper';
+                    case 'html':
+                    case 'css':
+                    case 'js':
+                    case 'py':
+                    case 'java':
+                    case 'c':
+                    case 'cpp': return 'fa-file-code';
+                    case 'tex':
+                    case 'bib': return 'fa-square-root-variable';
+                    case 'epub':
+                    case 'mobi': return 'fa-book';
+                    case 'dwg':
+                    case 'dxf':
+                    case 'stl': return 'fa-drafting-compass';
+                    case 'sav':
+                    case 'sas':
+                    case 'stata': return 'fa-chart-simple';
+                    default: return 'fa-file';
+                }
+            }
+
+            fileBox.innerHTML = `
+    <div class="each-file-box">
+        <div class="file-info">
+            <div class="file-icon-wrapper">
+                <i class="file-icon fas ${getFileIcon(fileType)}"></i>
+                <span class="file-type">${getFileTypeLabel(fileType)}</span>
+            </div>
+            <div>
+                <div class="file-name">${fileName}</div>
+                <p class="file-details">
+                    by ${senderName} • ${formatDate(sentDate)}
+                </p>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="button button-preview">
+                <i class="fas fa-eye"></i>
+                <span>Preview</span>
+            </button>
+            <button class="button button-download">
+                <i class="fas fa-download"></i>
+                <span>Download</span>
+            </button>
+        </div>
+    </div>
+    `;
+
+            fileBoxContainer.appendChild(fileBox);
+        }
+
+        // Example usage
+        document.addEventListener('DOMContentLoaded', function () {
+            createFileBox("mp3", "John Doe", "2024-02-23", "important_audio.mp3");
+            createFileBox("pdf", "Jane Smith", "2024-03-15", "report.pdf");
+            createFileBox("jpg", "Alice Johnson", "2024-03-20", "image.jpg");
+        });
+    </script>
+</body>
+
+</html>
